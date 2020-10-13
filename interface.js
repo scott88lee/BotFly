@@ -1,12 +1,21 @@
 let history = []
 let candleBuffer = []
-let timeScale = 60 // In Seconds
+let timeScale = 300 // In Seconds
+// 60 - 1min, 300 - 5mins, 900 - 15mins, 3600 - 1hr
 
 let poll = setInterval(main, 1000);
+
+function main() {
+  updateCandles()
+}
 
 function quit() {
   clearInterval(poll)
 }
+
+//////////////////////////////
+//        Data feed         //
+//////////////////////////////
 
 function readPrice() {
   let integer = document.getElementsByClassName('ig-ticket-price-button_pre-emphasised-price')
@@ -17,24 +26,11 @@ function readPrice() {
   buyPrice = integer[1].innerText + decimal[1].innerText + pips[1].innerText
   
   spotPrice = (Number(sellPrice)*1000 + Number(buyPrice)*1000) / 2
-  spread = Number(buyPrice)*1000 - Number(sellPrice)*1000
-  
+  spread = Number(buyPrice)*1000 - Number(sellPrice)*1000  
   return [spotPrice,spread]
-}  
-
-function selectDirection(action) {
-  let selection = document.getElementsByClassName('ig-ticket-price-button_price-direction')
-
-  if (action == "sell") {
-    selection[0].click()
-  } 
-  else if (action == "buy"){
-    selection[1].click()
-  }
 }
 
-
-function main() {
+function updateCandles(){
   if (candleBuffer.length < timeScale) {
     candleBuffer.push(readPrice()[0])
   } else {
@@ -56,5 +52,20 @@ function main() {
       color: candleBuffer[0] > candleBuffer[candleBuffer.length-1] ? "red" : "green"
     })
     candleBuffer = []
+  }
+}  
+
+//////////////////////////////
+//    Interface actions     //
+//////////////////////////////
+
+function selectDirection(action) {
+    let selection = document.getElementsByClassName('ig-ticket-price-button_price-direction')
+    
+  if (action == "sell") {
+    selection[0].click()
+  } 
+  else if (action == "buy"){
+    selection[1].click()
   }
 }

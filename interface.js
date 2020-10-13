@@ -28,14 +28,23 @@ function quit() {                     /// O
 //////////////////////////////
 
 function checkTrend(numOfCandles) {
-  for (let i=0; i<numOfCandles; i++) {
-    history[history.length]
+  for (let i=1; i<numOfCandles; i++) {
+    if (history[history.length-i].color == "green" && getCurrentDirection() == "up") {
+      trend = "upTrend"    	
+    } else trend = false
   }
 }
 
 function getCurrentDirection() {
-  history[history.length-1]
-  history[history.length-1]
+  let currentDirection = ""
+  
+  if (history[history.length-1].close > history[history.length-2].close) {
+    currentDirection = "up"	
+  }  
+  if (history[history.length-1].close < history[history.length-2].close) {
+    currentDirection = "down"	
+  }
+  return currentDirection
 }
 
 //////////////////////////////

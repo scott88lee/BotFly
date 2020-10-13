@@ -1,16 +1,41 @@
+// GLOBALS //
+let trend = ""
+let direction = ""
 let history = []
 let candleBuffer = []
-let timeScale = 300 // In Seconds
-// 60 - 1min, 300 - 5mins, 900 - 15mins, 3600 - 1hr
 
-let poll = setInterval(main, 1000);
+////////////////////////
+//    Bot Settings    //
+////////////////////////
+let timeScale = 300   // In Seconds, 60-1min, 300-5mins, 900-15mins
+let minNumOfCandles = 5 // Min num of candles in succession to be considered trending
 
-function main() {
-  updateCandles()
+/////////////////////////////////////////
+let poll = setInterval(main, 1000);   /// E
+                                      /// X
+function main() {                     /// E
+  updateCandles();                    /// C
+  checkTrend(minNumOfCandles)         /// U
+}                                     /// T
+                                      /// I
+function quit() {                     /// O
+  clearInterval(poll)                 /// N
+}                                     /// !
+/////////////////////////////////////////
+
+//////////////////////////////
+//        Bot Logic         //
+//////////////////////////////
+
+function checkTrend(numOfCandles) {
+  for (let i=0; i<numOfCandles; i++) {
+    history[history.length]
+  }
 }
 
-function quit() {
-  clearInterval(poll)
+function getCurrentDirection() {
+  history[history.length-1]
+  history[history.length-1]
 }
 
 //////////////////////////////

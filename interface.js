@@ -1,13 +1,17 @@
 // GLOBALS //
-let trend = ""
-let direction = ""
+let status = {
+  trend: "none",
+  direction: "none",
+  count: 1
+}
+
 let history = []
 let candleBuffer = []
 
 ////////////////////////
 //    Bot Settings    //
 ////////////////////////
-let timeScale = 300   // In Seconds, 60-1min, 300-5mins, 900-15mins
+let timeScale = 60   // In Seconds, 60-1min, 300-5mins, 900-15mins
 let minNumOfCandles = 5 // Min num of candles in succession to be considered trending
 
 /////////////////////////////////////////
@@ -15,7 +19,7 @@ let poll = setInterval(main, 1000);   /// E
                                       /// X
 function main() {                     /// E
   updateCandles();                    /// C
-  checkTrend(minNumOfCandles)         /// U
+                                      /// U
 }                                     /// T
                                       /// I
 function quit() {                     /// O
@@ -27,24 +31,42 @@ function quit() {                     /// O
 //        Bot Logic         //
 //////////////////////////////
 
-function checkTrend(numOfCandles) {
-  for (let i=1; i<numOfCandles; i++) {
-    if (history[history.length-i].color == "green" && getCurrentDirection() == "up") {
-      trend = "upTrend"    	
-    } else trend = false
-  }
-}
+function updateTrend(numOfCandles) {
 
-function getCurrentDirection() {
-  let currentDirection = ""
-  
-  if (history[history.length-1].close > history[history.length-2].close) {
-    currentDirection = "up"	
-  }  
-  if (history[history.length-1].close < history[history.length-2].close) {
-    currentDirection = "down"	
+  if (history[history.length-1].color == "green") {
+    if (status.direction == "up") {
+      status.count++
+
+      if (status.count < numOfCandles) {
+        console.log("Forming "+ status.direction+ ": " + status.count)
+      } else {
+        console.log(status.direction + "trend strength: " + (status.count-numOfCandles+1))
+      }
+    } else {
+      status.direction = "up"
+      status.count = 1
+      status.trend = "turning"
+      
+      console.log("Turning up")
+    }
   }
-  return currentDirection
+  if (history[history.length-1].color == "red") {
+    if (status.direction == "down") {
+      status.count++
+
+      if (status.count < numOfCandles) {
+        console.log("Forming "+ status.direction + ": " + status.count)
+      } else {
+        console.log(status.direction + "trend strength: " + (status.count-numOfCandles+1))
+      }
+    } else {
+      status.direction = "down"
+      status.count = 1
+      status.trend = "turning"
+
+      console.log("Turning down")
+    }
+  }
 }
 
 //////////////////////////////
@@ -85,6 +107,8 @@ function updateCandles(){
       low: candleLow,
       color: candleBuffer[0] > candleBuffer[candleBuffer.length-1] ? "red" : "green"
     })
+    updateTrend(minNumOfCandles)
+    console.log(status)
     candleBuffer = []
   }
 }  

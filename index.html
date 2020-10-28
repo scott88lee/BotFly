@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>
+            Mapper
+        </title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="text" id="y" contenteditable="true">
+                Main div
+            </div>
+            <div class="text" id="float" contenteditable="true">
+                Secodn div
+            </div>
+        </div>
+    </body>
+    <script>
+        let x = document.getElementById("float")
+        x.addEventListener("dragenter", function(e) {
+            let yvalue = document.getElementById('y').innerText
+            console.log(yvalue)
+            console.log(x.innerText)
+            console.log(e.dataTransfer)})
+
+
+    </script>
+    <style>
+        container {
+            width: 80%;
+            margin: 0, auto;
+            height: 500px;
+        }
+        .text {
+            display: inline-block;
+            width: 49%;
+            height: 500px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        #float {
+            float: right;
+        }
+    </style>
+</html>
